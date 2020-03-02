@@ -1,4 +1,4 @@
-const APP_DOMAIN = 'http://localhost:3000';
+const APP_DOMAIN = 'http://138.49.184.109:3000';
 const APP_NAME = 'Phacebook';
 const API_VERSION = 'v1';
 const API_PREFIX = '/api/' + API_VERSION + '/';
@@ -6,7 +6,7 @@ const API_PREFIX = '/api/' + API_VERSION + '/';
 const SECRET_KEY = 'The secret key for both cookie parser and express-session middleware';
 
 const S3_BUCKET_NAME = 'capstone.hui';
-const S3_BACKUP_PATH = '/Users/lihui/Develop/s3-capstone-backup/';
+const S3_BACKUP_PATH = '/home/ubuntu/s3-capstone-backup/';
 const IMAGES_FOLDER = 'images/';
 const FACES_THUMBNAIL_FOLDER = 'faces/';
 const COMPRESSED_FOLDER = 'compressed/';
