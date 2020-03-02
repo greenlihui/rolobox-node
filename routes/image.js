@@ -114,10 +114,8 @@ router.get('/users/:userId/images/:imageFilename/analysis', async (req, res, nex
     try {
         const faceDetails = (await awsService.rekognition.detectFaces(imageFilename)).FaceDetails;
         if (faceDetails.length) {
-            const [cropPromises, uploadPromises, deletePromises] = utils.generateThumbnail(imageFilename, faceDetails);
-            await Promise.all(cropPromises);
-            await Promise.all(uploadPromises);
-            Promise.all(deletePromises);
+            const crops = await utils.generateThumbnail(imageFilename, faceDetails);
+            console.log(crops);
 
             await utils.compressImageInSize(imageFilename);
             await awsService.s3.putObject(IMAGES_FOLDER, imageFilename);
