@@ -4,6 +4,7 @@ const imageMin = require('imagemin');
 const imageMinMozJpeg = require('imagemin-mozjpeg');
 const imageMinPngquant = require('imagemin-pngquant');
 const fs = require('fs');
+const awsService = require('../services/aws.service');
 
 const config = require('../app-config');
 const IMAGES_FOLDER = config.IMAGES_FOLDER;
@@ -53,7 +54,11 @@ async function generateThumbnail(filename, faceDetails) {
         const boundingBox = faceDetails[i].BoundingBox;
         const squareBoundingBox = generateSquareBoundingBox(boundingBox, metadata);
         const fileAbsolutePath = LOCAL_FACES_FOLDER + outputFilename;
+
+        // crop and then upload to s3
         cropPromises.push(image.extract(squareBoundingBox).toFile(fileAbsolutePath));
+        cropPromises.push(awsService.s3.putObject(FACES_THUMBNAIL_FOLDER, outputFilename));
+        
         faceDetails[i].ThumbnailImageFilename = outputFilename;
     }
     return Promise.all(cropPromises);

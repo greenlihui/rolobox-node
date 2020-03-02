@@ -141,7 +141,7 @@ router.get('/users/:userId/faceThumbnails/:thumbnailId', async (req, res, next) 
         const data = await awsService.s3.getObject(FACES_THUMBNAIL_FOLDER, thumbnailId);
         res.status(200).send(data.Body);
     } catch (err) {
-        res.next(err);
+        next(err);
     }
 });
 
