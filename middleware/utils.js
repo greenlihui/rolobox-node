@@ -54,7 +54,8 @@ async function generateThumbnail(filename, faceDetails) {
         const boundingBox = faceDetails[i].BoundingBox;
         const squareBoundingBox = generateSquareBoundingBox(boundingBox, metadata);
         const fileAbsolutePath = LOCAL_FACES_FOLDER + outputFilename;
-        cropPromises.push(image.extract(squareBoundingBox).toFile(fileAbsolutePath));
+        const buffer = await image.extract(squareBoundingBox).toBuffer(fileAbsolutePath);
+        cropPromises.push(awsService.s3.putObjectBuffer(buffer, FACES_THUMBNAIL_FOLDER, fileAbsolutePath));
         faceDetails[i].ThumbnailImageFilename = outputFilename;
     }
     return Promise.all(cropPromises);

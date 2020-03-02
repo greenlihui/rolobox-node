@@ -69,6 +69,14 @@ function searchSimilarFaces(collectionId, thumbnailImageFilename) {
 }
 
 /******************** S3 APIS ********************/
+function putObjectBuffer(buffer, folder, filename) {
+    const params = {
+        Body: buffer,
+        Bucket: S3_BUCKET_NAME,
+        Key: folder + filename
+    };
+    return s3.putObject(params).promise();
+}
 
 function putObject(folder, filename) {
     const filepath = S3_BACKUP_PATH + folder + filename;
@@ -106,6 +114,7 @@ module.exports = {
     },
     s3: {
         putObject: putObject,
+        putObjectBuffer: putObjectBuffer,
         getObject: getObject,
         deleteObject: deleteObject
     }
