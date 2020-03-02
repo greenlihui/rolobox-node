@@ -17,7 +17,7 @@ const USER_DEFAULT_AVATAR_FILENAME = 'default-m';
 
 const FACE_MATCH_THRESHOLD = 95;
 
-const DB_URI = 'mongodb://127.0.0.1:27017/capstone';
+const DB_URI = 'mongodb://127.0.0.1:27017/rolobox';
 
 const BCRYPT_SALT_ROUNDS = 10;
 
