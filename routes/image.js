@@ -114,7 +114,11 @@ router.get('/users/:userId/images/:imageFilename/analysis', async (req, res, nex
     try {
         const faceDetails = (await awsService.rekognition.detectFaces(imageFilename)).FaceDetails;
         if (faceDetails.length) {
-            await utils.generateThumbnail(imageFilename, faceDetails);
+            const [cropPromises, uploadPromises, deletePromises] = utils.generateThumbnail(imageFilename, faceDetails);
+            await Promise.all(cropPromises);
+            await Promise.all(uploadPromises);
+            Promise.all(deletePromises);
+
             await utils.compressImageInSize(imageFilename);
             await awsService.s3.putObject(IMAGES_FOLDER, imageFilename);
             await awsService.s3.putObject(COMPRESSED_FOLDER, imageFilename);
@@ -123,12 +127,12 @@ router.get('/users/:userId/images/:imageFilename/analysis', async (req, res, nex
                 owner: userId,
                 faceDetails: faceDetails
             });
-
-            // delete files that has been uploaded to s3
-            utils.deleteFile(LOCAL_IMAGES_FOLDER + imageFilename, (err) => console.log(err));
-            utils.deleteFile(LOCAL_COMPRESSED_FOLDER + imageFilename, (err) => console.log(err));
         }
-        res.status(200).json({data: faceDetails});
+        res.status(200).json({data: faceDetails}).end();
+
+        // delete files that has been uploaded to s3
+        await utils.deleteFile(LOCAL_IMAGES_FOLDER + imageFilename);
+        await utils.deleteFile(LOCAL_COMPRESSED_FOLDER + imageFilename);
     } catch (err) {
         next(err);
     }

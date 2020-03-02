@@ -42,12 +42,13 @@ async function compressImageInQuality(filename) {
  * generate face thumbnails and upload to faces folder in S3 Bucket.
  * @param {String} filename The filename of the image to be cropped to generate faces
  * @param {Array} faceDetails Data returned from AWS detectFaces
- * @return {Promise<[any, any, any...]>} Promises of all thumbnails uploaded to the bucket.
  */
 async function generateThumbnail(filename, faceDetails) {
     const imageFilePath = LOCAL_IMAGES_FOLDER + filename;
     const image = sharp(imageFilePath);
     let cropPromises = [];
+    let uploadPromises = [];
+    let deletePromises = [];
     for (let i = 0; i < faceDetails.length; i++) {
         const outputFilename = uuid();
         const metadata = await image.metadata();
@@ -57,11 +58,11 @@ async function generateThumbnail(filename, faceDetails) {
 
         // crop and then upload to s3
         cropPromises.push(image.extract(squareBoundingBox).toFile(fileAbsolutePath));
-        cropPromises.push(awsService.s3.putObject(FACES_THUMBNAIL_FOLDER, outputFilename));
-        
+        uploadPromises.push(awsService.s3.putObject(FACES_THUMBNAIL_FOLDER, outputFilename));
+        deletePromises.push(deleteFile(LOCAL_FACES_FOLDER + outputFilename));
         faceDetails[i].ThumbnailImageFilename = outputFilename;
     }
-    return Promise.all(cropPromises);
+    return [cropPromises, uploadPromises, deletePromises];
 }
 
 /**
@@ -153,8 +154,15 @@ function processFilters(filters) {
     return res;
 }
 
-function deleteFile(filepath, cb) {
-    fs.unlink(filepath, cb);
+function deleteFile(filepath) {
+    return new Promise((resolve, reject) => {
+        fs.unlink(filepath, (err) => {
+            if (err) {
+                reject(err);
+            }
+            return resolve(filepath);
+        });
+    });
 }
 
 module.exports = {
