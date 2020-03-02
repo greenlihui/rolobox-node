@@ -7,8 +7,10 @@ const imageService = require('../services/image.service');
 const config = require('../app-config');
 const IMAGES_FOLDER = config.IMAGES_FOLDER;
 const COMPRESSED_FOLDER = config.COMPRESSED_FOLDER;
+const FACES_THUMBNAIL_FOLDER = config.FACES_THUMBNAIL_FOLDER;
 const LOCAL_IMAGES_FOLDER = config.LOCAL_IMAGES_FOLDER;
 const LOCAL_FACES_FOLDER = config.LOCAL_FACES_FOLDER;
+const LOCAL_COMPRESSED_FOLDER = config.LOCAL_COMPRESSED_FOLDER;
 
 
 /******************** PASSED TEST BELOW ********************/
@@ -121,6 +123,10 @@ router.get('/users/:userId/images/:imageFilename/analysis', async (req, res, nex
                 owner: userId,
                 faceDetails: faceDetails
             });
+
+            // delete files that has been uploaded to s3
+            utils.deleteFile(LOCAL_IMAGES_FOLDER + imageFilename, (err) => console.log(err));
+            utils.deleteFile(LOCAL_COMPRESSED_FOLDER + imageFilename, (err) => console.log(err));
         }
         res.status(200).json({data: faceDetails});
     } catch (err) {
@@ -131,9 +137,9 @@ router.get('/users/:userId/images/:imageFilename/analysis', async (req, res, nex
 // GET FACE THUMBNAIL IMAGE
 router.get('/users/:userId/faceThumbnails/:thumbnailId', async (req, res, next) => {
     const thumbnailId = req.params.thumbnailId;
-    const filepath = LOCAL_FACES_FOLDER + thumbnailId;
     try {
-        res.download(filepath);
+        const data = await awsService.s3.getObject(FACES_THUMBNAIL_FOLDER, thumbnailId);
+        res.status(200).send(data.Body);
     } catch (err) {
         res.next(err);
     }

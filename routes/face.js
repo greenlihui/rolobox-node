@@ -42,6 +42,9 @@ router.post('/users/:userId/images/:imageId/faces', async (req, res, next) => {
     try {
         // upload face thumbnail to aws s3 and then index face to get face record
         await awsService.s3.putObject(FACES_THUMBNAIL_FOLDER, thumbnailImageFilename);
+        const filepath = appConfig.LOCAL_FACES_FOLDER + thumbnailImageFilename;
+        utils.deleteFile(filepath, (err) => console.log(err));
+
         const indexResult = await awsService.rekognition.indexFace(thumbnailImageFilename, userId);
         const faceRecord = indexResult.FaceRecords[0];
 

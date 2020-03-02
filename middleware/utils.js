@@ -3,6 +3,7 @@ const uuid = require('uuid/v1');
 const imageMin = require('imagemin');
 const imageMinMozJpeg = require('imagemin-mozjpeg');
 const imageMinPngquant = require('imagemin-pngquant');
+const fs = require('fs');
 
 const config = require('../app-config');
 const IMAGES_FOLDER = config.IMAGES_FOLDER;
@@ -147,10 +148,15 @@ function processFilters(filters) {
     return res;
 }
 
+function deleteFile(filepath, cb) {
+    fs.unlink(filepath, cb);
+}
+
 module.exports = {
     generateFaceDoc: generateFaceDoc,
     generateThumbnail: generateThumbnail,
     processFilters: processFilters,
     compressImageInSize: compressImageInSize,
-    compressImageInQuality: compressImageInQuality
+    compressImageInQuality: compressImageInQuality,
+    deleteFile: deleteFile
 };

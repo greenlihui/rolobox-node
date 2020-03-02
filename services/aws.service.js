@@ -70,13 +70,6 @@ function searchSimilarFaces(collectionId, thumbnailImageFilename) {
 
 /******************** S3 APIS ********************/
 
-/**
- * Upload an object to S3 bucket.
- * @param folder The folder that the object to be uploaded to.
- * Either IMAGES_FOLDER or FACES_THUMBNAIL_FOLDER
- * @param filename The filename that the object will be named in the bucket
- * @returns {Promise<PromiseResult<S3.PutObjectOutput, AWSError>>}
- */
 function putObject(folder, filename) {
     const filepath = S3_BACKUP_PATH + folder + filename;
     const params = {
