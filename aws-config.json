@@ -1,9 +1,0 @@
-{
-  "accessKeyId": "AKIASYZEN6LVYRBVH27E",
-  "secretAccessKey": "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",
-  "region": "us-east-2",
-  "apiVersions": {
-    "rekognition": "2016-06-27",
-    "s3": "2006-03-01"
-  }
-}
