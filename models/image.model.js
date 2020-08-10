@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Face = require('../models/face.model');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 const Mixed = mongoose.Schema.Types.Mixed;
 const aws = require('../services/aws.service');
@@ -28,7 +29,7 @@ const imageSchema = mongoose.Schema({
 
 // Delete an image will trigger delete all faces in that image and s3 object
 imageSchema.pre('remove', {document: true}, async function (next) {
-    require('../models/face.model').find({_id: {$in: this.faces}}).then(faces => {
+    Face.find({_id: {$in: this.faces}}).then(faces => {
         Promise.all(faces.map(face => face.remove())).then(_ => next());
     });
     await aws.s3.deleteObject(IMAGES_FOLDER, this.filename);
