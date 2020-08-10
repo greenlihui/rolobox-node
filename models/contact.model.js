@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Face = require('../models/face.model');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 const USER_DEFAULT_AVATAR_FILENAME = require('../app-config').USER_DEFAULT_AVATAR_FILENAME;
 
@@ -55,7 +56,7 @@ contactSchema.virtual('name.full').get(function () {
 
 // Delete a contact will trigger deleting faces of that contacts
 contactSchema.pre('remove', {document: true}, function (next) {
-    require('../models/face.model').find({_id: {$in: this.faces.list}}).then(faces => {
+    Face.find({_id: {$in: this.faces.list}}).then(faces => {
         Promise.all(faces.map(face => face.remove())).then(_ => next());
     });
 });

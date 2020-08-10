@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const Image = require('../models/image.model');
+const Contact = require('../models/contact.model');
 const Mixed = mongoose.Schema.Types.Mixed;
 const aws = require('../services/aws.service');
 const FACES_THUMBNAIL_FOLDER = require('../app-config').FACES_THUMBNAIL_FOLDER;
@@ -22,13 +24,13 @@ faceSchema.pre('remove', {document: true}, async function (next) {
     await aws.rekognition.deleteFace(this.awsCollectionId, this.awsFaceId);
 
     // delete one face reference from image faces list
-    await require('../models/image.model').updateOne({faces: this._id}, {$pull: {faces: this._id}});
+    await Image.updateOne({faces: this._id}, {$pull: {faces: this._id}});
 
     // delete one face reference from contact faces list
-    await require('../models/contact.model').updateOne({'faces.list': this._id}, {$pull: {'faces.list': this._id}});
+    await Contact.updateOne({'faces.list': this._id}, {$pull: {'faces.list': this._id}});
 
     // get the contact that has removed a face, set his
-    const contact = await require('../models/contact.model')
+    const contact = Contact
         .findOne({'faces.avatar': this.thumbnailImageFilename})
         .populate('faces.list', 'thumbnailImageFilename')
         .exec();

@@ -21,15 +21,15 @@ connectDB();
 
 
 /********** LOGGING **********/
-const logFolder = './logs';
-if (!fs.existsSync(logFolder)) {
-    fs.mkdirSync(logFolder, {recursive: true});
-}
-const date = (new Date(Date.now())).toLocaleDateString().replace(/\//g, '-');
-const logFilename = './logs/' + date + '.log';
-const accessLogStream = fs.createWriteStream(path.join(__dirname, logFilename), {flags: 'a'});
-app.use(logger('combined', {stream: accessLogStream}));
-app.use(logger('dev'));
+// const logFolder = './logs';
+// if (!fs.existsSync(logFolder)) {
+//     fs.mkdirSync(logFolder, {recursive: true});
+// }
+// const date = (new Date(Date.now())).toLocaleDateString().replace(/\//g, '-');
+// const logFilename = './logs/' + date + '.log';
+// const accessLogStream = fs.createWriteStream(path.join(__dirname, logFilename), {flags: 'a'});
+// app.use(logger('combined', {stream: accessLogStream}));
+// app.use(logger('dev'));
 
 
 const server = require('http').createServer(app);
