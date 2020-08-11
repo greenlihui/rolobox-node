@@ -1,4 +1,6 @@
 # RoloBox
+RoloBox is my capstone project during my study in [UWL](https://www.uwlax.edu/), it has been moved offline after I completed my project presentation.
+
 - [rolobox-angular](https://github.com/greenlihui/rolobox-angular)
 - [rolobox-node](https://github.com/greenlihui/rolobox-node)
 - [rolobox-flutter](https://github.com/greenlihui/rolobox-flutter)
