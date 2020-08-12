@@ -19,20 +19,55 @@ RoloBox is an application that allows users to manage a list of contacts while s
 - other users as friends.
 - messages to my friends directly in the app.
 
-## app architecture
+## design and planing
+### app architecture
 ![app architecture](assets/app-architecture.png)
 
-## er diagram
+### er diagram
 ![er diagram](assets/er-diagram.png)
 
+### software engineering practice
+![](assets/burndown-diagram.png)
+
+### user interface
+see [rolobox-angular](https://github.com/greenlihui/rolobox-angular) and [rolobox-flutter](https://github.com/greenlihui/rolobox-flutter) for UI design
+
 ## implementation
-## aws
-
-## security
-
-
-## programming style
-### [mongoose programming style guide](https://github.com/Zwimber/mongoose-style-guide#folder-structure)
 ### RESTful API
+**Layered Resources**
 
+| Resources | Layer Path                                                   |
+| --------- | ------------------------------------------------------------ |
+| User      | /users/{userId}                                              |
+| Image     | /users/{userId}/images/{imageId}                             |
+| Group     | /users/{userId}/groups/{groupId}                             |
+| Contact   | /users/{userId}/groups/{groupId}/contacts/{contactId}        |
+| Face      | /users/{userId}/groups/{groupId}/contacts/{contactId}/faces/{faceId} |
+| Friend    | /users/{userId}/friends/{friendId}                           |
+| Message   | /users/{userId}/friends/{friendId}/messages/{messageId}      |
+
+HTTP Methods
+- GET for retrieve
+- PUT for update
+- POST for create
+- DELETE for delete
+
+### used technology
+**AWS**
+- S3 for image storage
+- Rekognition for face indexing, detection and recognition
+
+**Google**
+- Firebase ML kit for real time face detection in mobile application
+
+**[sharp](https://sharp.pixelplumbing.com/install)**
+- Image cropping, rotation and compression.
+
+**Security Consideration**
+- Authorization and authentication support
+- Session management
+- XSS and CSRF protection
+
+### programming style
+- ### [mongoose programming style guide](https://github.com/Zwimber/mongoose-style-guide#folder-structure)
 
