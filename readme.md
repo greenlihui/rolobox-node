@@ -1,9 +1,12 @@
 # RoloBox
-RoloBox is my capstone project during my study in [UWL](https://www.uwlax.edu/), it has been moved offline after I completed my project presentation.
+RoloBox is my capstone project during my study in [UWL](https://www.uwlax.edu/), it has been moved offline after I completed my project presentation. If you would like to see the demo, go to [Bilibili](https://www.bilibili.com/video/bv1q54y1i7nr).
 
-- [rolobox-angular](https://github.com/greenlihui/rolobox-angular)
+The project has been divided into three parts:
 - [rolobox-node](https://github.com/greenlihui/rolobox-node)
+- [rolobox-angular](https://github.com/greenlihui/rolobox-angular)
 - [rolobox-flutter](https://github.com/greenlihui/rolobox-flutter)
+
+This repository is the back end of RoloBox, written with NodeJS/express.
 
 ## intro
 RoloBox is an application that allows users to manage a list of contacts while supporting a photo-based matching feature so that users can upload images of their contacts and, more importantly, identify those contacts at a later time by taking a photo of a room or gathering with their phone. Once a person is labeled with contact information in a photo, they will later be recognized and automatically labeled when appearing in another photo.
@@ -70,4 +73,3 @@ HTTP Methods
 
 ### programming style
 - ### [mongoose programming style guide](https://github.com/Zwimber/mongoose-style-guide#folder-structure)
-
